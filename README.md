@@ -1,6 +1,4 @@
-<div align="center">
-
-  <h1><code>wasm-nu</code></h1>
+# wasm-nu
 
 ## 🛠️ Build with `wasm-pack build`
 
