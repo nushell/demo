@@ -1,5 +1,9 @@
 # wasm-nu
 
+## ⬇️ Install `wasm-pack`
+
+First step, [install wasm-pack](https://rustwasm.github.io/wasm-pack/installer/).
+
 ## 🛠️ Build with `wasm-pack build`
 
 ```
