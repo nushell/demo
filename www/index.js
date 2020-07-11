@@ -33,8 +33,9 @@ document.getElementById("load-example-2").addEventListener("click", (event) => {
   runCommand();
 });
 
-document.getElementById("myform").addEventListener("keyup", (event) => {
-  if (event.key == "Enter") {
+nuinput.addEventListener("keydown", (event) => {
+  if (event.key == "Enter" && (event.metaKey || event.ctrlKey)) {
+    event.preventDefault();
     runCommand();
   }
 });
