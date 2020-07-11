@@ -29,7 +29,7 @@ pub async fn run_nu(line: String) -> String {
 
     log!("hello log!");
     let mut syncer = EnvironmentSyncer::new();
-    let mut context = create_default_context(&mut syncer, true);
+    let context = create_default_context(&mut syncer, true);
     match context {
         Ok(mut ctx) => {
             log!("processing line");
