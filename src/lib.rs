@@ -27,7 +27,6 @@ extern "C" {
 pub async fn run_nu(line: String) -> String {
     utils::set_panic_hook();
 
-    log!("hello log!");
     let mut syncer = EnvironmentSyncer::new();
     let context = create_default_context(&mut syncer, true);
     match context {
