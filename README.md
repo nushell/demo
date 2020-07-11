@@ -14,6 +14,7 @@ wasm-pack build
 
 ```
 cd www
-npm run start
+npm install
+npm start
 (in a browser: ) open "http://localhost:8080"
 ```
