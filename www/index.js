@@ -14,10 +14,12 @@ async function run_nu(input) {
 var nuinput = document.getElementById("nuinput");
 
 async function runCommand() {
-  var input = nuinput.value;
-  let output = await run_nu(input + "| to html");
+  var inputs = nuinput.value.split("\n").map((input) => {
+    return run_nu(input + "| to html");
+  });
+  let outputs = await Promise.all(inputs);
 
-  document.getElementById("demo").innerHTML = output;
+  document.getElementById("demo").innerHTML = outputs.join("<br/>");
 }
 
 document.getElementById("run-nu").addEventListener("click", (event) => {
