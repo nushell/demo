@@ -1,0 +1,15 @@
+image: gitpod/workspace-wasm
+tasks:
+  - init: |
+      wasm-pack build
+      cd www
+      npm install
+    command: cd www && npm start
+github:
+  prebuilds:
+    branches: true
+    pullRequestsFromForks: true
+    addBadge: true
+ports:
+  - port: 8080
+    onOpen: open-preview
