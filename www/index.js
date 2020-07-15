@@ -14,12 +14,38 @@ async function run_nu(input) {
 var nuinput = document.getElementById("nuinput");
 
 async function runCommand() {
-  var inputs = nuinput.value.split("\n").map((input) => {
+  var inputsRaw = nuinput.value.split("\n");
+  var inputs = inputsRaw.map((input) => {
     return run_nu(input + "| to html");
   });
   let outputs = await Promise.all(inputs);
 
-  document.getElementById("demo").innerHTML = outputs.join("<br/>");
+  document.getElementById("demo").innerHTML = outputs
+    .map((rawOutput, index) => {
+      var output = JSON.parse(rawOutput);
+      if (output.Ok) {
+        var result = output.Ok.replace(
+          /<html><body>(.*)<\/body><\/html>/,
+          "$1"
+        );
+        // console.log(result);
+        if (result) {
+          return result;
+        }
+        return "[no output]";
+      }
+      // console.log(output.Error.error.Diagnostic.diagnostic);
+      return `<span class="output-error">error</span>: ${
+        output.Error.error.Diagnostic.diagnostic.message
+      }
+      <div>${index + 1}: ${inputsRaw[index]}</div>
+      ${output.Error.error.Diagnostic.diagnostic.labels.map((label) => {
+        var padding = "&nbsp;".repeat(label.range.start + 3);
+        var marker = "^".repeat(label.range.end - label.range.start);
+        return `<div class="output-error">${padding}${marker} ${label.message}</div>`;
+      })}`;
+    })
+    .join("<br/>");
 }
 
 document.getElementById("run-nu").addEventListener("click", (event) => {
