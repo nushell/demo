@@ -4,6 +4,7 @@ tasks:
       wasm-pack build
       cd www
       npm install
+      cd ..
     command: cd www && npm start
 github:
   prebuilds:
