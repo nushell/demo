@@ -16,7 +16,7 @@ var nuinput = document.getElementById("nuinput");
 async function runCommand() {
   var inputsRaw = nuinput.value.split("\n").filter(Boolean);
   var inputs = inputsRaw.map((input) => {
-    return run_nu(input + "| to html");
+    return run_nu(input + "| to html --html_color");
   });
   let outputs = await Promise.all(inputs);
 
