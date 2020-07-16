@@ -14,7 +14,7 @@ async function run_nu(input) {
 var nuinput = document.getElementById("nuinput");
 
 async function runCommand() {
-  var inputsRaw = nuinput.value.split("\n");
+  var inputsRaw = nuinput.value.split("\n").filter(Boolean);
   var inputs = inputsRaw.map((input) => {
     return run_nu(input + "| to html");
   });
