@@ -12,6 +12,8 @@ First step, [install wasm-pack](https://rustwasm.github.io/wasm-pack/installer/)
 wasm-pack build
 ```
 
+If dependencies changed, run `cargo update` before running the above again.
+
 ## 🚴 Run the example:
 
 ```
