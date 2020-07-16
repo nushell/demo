@@ -34,7 +34,7 @@ async function runCommand() {
         }
         return "[no output]";
       }
-      // console.log(output.Error.error.Diagnostic.diagnostic);
+      console.log(output.Error.error);
       return `<span class="output-error">error</span>: ${
         output.Error.error.Diagnostic.diagnostic.message
       }
