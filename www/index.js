@@ -78,7 +78,6 @@ examplesContainer.addEventListener("click", (event) => {
   nuinput.value = /** @type HTMLButtonElement */ (event.target).getAttribute(
     "data-command"
   );
-  console.log(event, event.target.getAttribute("data-command"));
   runCommand();
 });
 
