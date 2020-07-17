@@ -87,3 +87,5 @@ nuinput.addEventListener("keydown", (event) => {
     runCommand();
   }
 });
+
+runCommand();
