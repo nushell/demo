@@ -60,6 +60,23 @@ async function runCommand() {
       </div>`;
     })
     .join("<br/>");
+  if (inputsRaw.some((input) => input === "help commands")) {
+    const commandCells = document.querySelectorAll(
+      "tr:not(:first-child) td:first-child"
+    );
+    for (const commandCell of commandCells) {
+      const command = commandCell.textContent;
+      const link = document.createElement("a");
+      link.textContent = command;
+      link.href = `#${command}`;
+      link.addEventListener("click", () => {
+        nuinput.value = `${command} --help`;
+        runCommand();
+      });
+      commandCell.textContent = "";
+      commandCell.appendChild(link);
+    }
+  }
 }
 
 document.getElementById("run-nu").addEventListener("click", (event) => {
