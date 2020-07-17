@@ -4,6 +4,16 @@ const data = [
   { name: "Bob", age: 25 },
   { name: "Fred", age: 35 },
 ];
+const examples = [
+  {
+    label: "process json",
+    command: `echo '${JSON.stringify(data)}' | from json`,
+  },
+  {
+    label: "process json, with where filter",
+    command: `echo '${JSON.stringify(data)}' | from json | where age > 30`,
+  },
+];
 const example1 = `echo '${JSON.stringify(data)}' | from json`;
 const example2 = `echo '${JSON.stringify(data)}' | from json | where age > 30`;
 
@@ -11,7 +21,9 @@ async function run_nu(input) {
   return await wasm.run_nu(input);
 }
 
-var nuinput = document.getElementById("nuinput");
+var nuinput = /** @type HTMLTextAreaElement */ (document.getElementById(
+  "nuinput"
+));
 
 async function runCommand() {
   var inputsRaw = nuinput.value.split("\n").filter(Boolean);
@@ -54,12 +66,19 @@ document.getElementById("run-nu").addEventListener("click", (event) => {
   runCommand();
 });
 
-document.getElementById("load-example-1").addEventListener("click", (event) => {
-  nuinput.value = example1;
-  runCommand();
-});
-document.getElementById("load-example-2").addEventListener("click", (event) => {
-  nuinput.value = example2;
+const examplesContainer = document.getElementById("examples");
+for (const example of examples) {
+  const button = document.createElement("button");
+  button.setAttribute("data-command", example.command);
+  button.getAttribute;
+  button.textContent = example.label;
+  examplesContainer.appendChild(button);
+}
+examplesContainer.addEventListener("click", (event) => {
+  nuinput.value = /** @type HTMLButtonElement */ (event.target).getAttribute(
+    "data-command"
+  );
+  console.log(event, event.target.getAttribute("data-command"));
   runCommand();
 });
 

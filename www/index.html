@@ -11,6 +11,10 @@
     />
 
     <style>
+      #examples {
+        display: flex;
+        column-gap: 1rem;
+      }
       .output-error {
         font-family: monospace;
       }
@@ -28,9 +32,8 @@
       >This page contains webassembly and javascript content, please enable
       javascript in your browser.</noscript
     >
-    <p>
-      <button id="load-example-1">Load Example 1</button>
-      <button id="load-example-2">Load Example 2</button>
+    <p id="examples">
+      <button data-command="help commands">list all commands</button>
     </p>
     <form id="myform">
       <textarea id="nuinput" name="nuinput" rows="5" cols="120">
