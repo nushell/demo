@@ -35,15 +35,17 @@ async function runCommand() {
         return "[no output]";
       }
       console.log(output.Error.error);
-      return `<span class="output-error">error</span>: ${
-        output.Error.error.Diagnostic.diagnostic.message
-      }
-      <div>${index + 1}: ${inputsRaw[index]}</div>
-      ${output.Error.error.Diagnostic.diagnostic.labels.map((label) => {
-        var padding = "&nbsp;".repeat(label.range.start + 3);
-        var marker = "^".repeat(label.range.end - label.range.start);
-        return `<div class="output-error">${padding}${marker} ${label.message}</div>`;
-      })}`;
+      return `<div class="output-error">
+        <span class="output-error--inline">error</span>: ${
+          output.Error.error.Diagnostic.diagnostic.message
+        }
+        <div>${index + 1}: ${inputsRaw[index]}</div>
+        ${output.Error.error.Diagnostic.diagnostic.labels.map((label) => {
+          var padding = "&nbsp;".repeat(label.range.start + 3);
+          var marker = "^".repeat(label.range.end - label.range.start);
+          return `<div class="output-error--inline">${padding}${marker} ${label.message}</div>`;
+        })}
+      </div>`;
     })
     .join("<br/>");
 }
