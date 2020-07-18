@@ -3,5 +3,5 @@ function getRandomInt(max) {
 }
 
 export function random(start, end) {
-    return getRandomInt(6) + 1;
+    return getRandomInt(end) + start;
 }
