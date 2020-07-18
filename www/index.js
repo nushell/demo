@@ -54,17 +54,17 @@ async function runCommand() {
       console.log(error);
       return `<div class="output-error">
         <span class="output-error--inline">error</span>: ${
-          (error.UntaggedRuntimeError && error.UntaggedRuntimeError.reason) ||
-          error.Diagnostic.diagnostic.message
+        (error.UntaggedRuntimeError && error.UntaggedRuntimeError.reason) ||
+        error.Diagnostic.diagnostic.message
         }
         <div>${index + 1}: ${inputsRaw[index]}</div>
         ${
-          error.Diagnostic &&
-          error.Diagnostic.diagnostic.labels.map((label) => {
-            var padding = "&nbsp;".repeat(label.range.start + 3);
-            var marker = "^".repeat(label.range.end - label.range.start);
-            return `<div class="output-error--inline">${padding}${marker} ${label.message}</div>`;
-          })
+        error.Diagnostic &&
+        error.Diagnostic.diagnostic.labels.map((label) => {
+          var padding = "&nbsp;".repeat(label.range.start + 3);
+          var marker = "^".repeat(label.range.end - label.range.start);
+          return `<div class="output-error--inline">${padding}${marker} ${label.message}</div>`;
+        })
         }
       </div>`;
     })
@@ -110,6 +110,9 @@ examplesContainer.addEventListener("click", (event) => {
 nuinput.addEventListener("keydown", (event) => {
   if (event.key == "Enter") {
     if (event.metaKey || event.ctrlKey) {
+      event.preventDefault();
+      runCommand();
+    } else {
       const startPos = nuinput.selectionStart;
       const endPos = nuinput.selectionEnd;
       nuinput.value =
@@ -118,9 +121,6 @@ nuinput.addEventListener("keydown", (event) => {
         nuinput.value.substring(nuinput.selectionEnd, nuinput.value.length);
       nuinput.selectionStart = startPos + 1;
       nuinput.selectionEnd = startPos + 1;
-    } else {
-      event.preventDefault();
-      runCommand();
     }
   }
 });

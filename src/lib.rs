@@ -1,4 +1,7 @@
+mod ls;
+mod open;
 mod random_dice;
+mod sys;
 mod utils;
 
 use wasm_bindgen::prelude::*;
@@ -43,7 +46,12 @@ pub async fn run_nu(line: String) -> String {
     match context {
         Ok(mut ctx) => {
             log!("processing line");
-            ctx.add_commands(vec![whole_stream_command(random_dice::SubCommand)]);
+            ctx.add_commands(vec![
+                whole_stream_command(random_dice::SubCommand),
+                whole_stream_command(ls::Ls),
+                whole_stream_command(open::Open),
+                whole_stream_command(sys::Sys),
+            ]);
             match parse_and_eval(&line, &mut ctx).await {
                 Ok(val) => match serde_json::to_string(&OkError::Ok(val)) {
                     Ok(output) => output,
