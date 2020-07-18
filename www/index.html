@@ -1,53 +1,82 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello wasm-nu</title>
-    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
-    />
 
-    <style>
-      #examples {
-        display: flex;
-        column-gap: 1rem;
-      }
-      .output-error {
-        font-family: monospace;
-      }
-      .output-error--inline {
-        color: red;
-      }
-      td {
-        min-width: 6rem;
-      }
-    </style>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hello wasm-nu</title>
+  <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css" />
 
-  <body>
-    <header>
-      <h1>wasm-nu</h1>
-    </header>
-    <noscript
-      >This page contains webassembly and javascript content, please enable
-      javascript in your browser.</noscript
-    >
-    <p id="examples">
-      <button data-command="help commands">list all commands</button>
-    </p>
-    <form id="myform">
-      <textarea id="nuinput" name="nuinput" rows="5" cols="120">
-help commands</textarea
-      >
-    </form>
-    <button id="run-nu">Run</button>
-    <small>Alternatively, press Ctrl+Enter (or Command+Enter on OSX)</small>
+  <style>
+    #examples {
+      display: flex;
+      column-gap: 1rem;
+    }
 
-    <br /><br />
-    <p id="demo"></p>
-    <script src="./bootstrap.js"></script>
-  </body>
+    .output-error {
+      font-family: monospace;
+    }
+
+    .output-error--inline {
+      color: red;
+    }
+
+    td {
+      min-width: 6rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>wasm-nu</h1>
+  </header>
+  <noscript>This page contains webassembly and javascript content, please enable
+    javascript in your browser.</noscript>
+  <script type="text/javascript" src="browserfs.min.js"></script>
+  <script type="text/javascript">
+    // Installs globals onto window:
+    // * Buffer
+    // * require (monkey-patches if already defined)
+    // * process
+    // You can pass in an arbitrary object if you do not wish to pollute
+    // the global namespace.
+    BrowserFS.install(window);
+    // Configures BrowserFS to use the LocalStorage file system.
+    BrowserFS.configure({
+      fs: "LocalStorage"
+    }, function (e) {
+      if (e) {
+        // An error happened!
+        throw e;
+      }
+
+      console.log("ready!");
+      // Otherwise, BrowserFS is ready-to-use!
+      var fs = BrowserFS.BFSRequire('fs');
+      fs.writeFileSync("programming.txt", "this is my contents");
+      // fs.writeFileSync("simple.json", '{"name": "Sally", "age": 45}')
+      fs.readdir('/', function (e, contents) {
+        // etc.
+        console.log(e);
+        console.log(contents);
+      });
+    });
+  </script>
+  <p id="examples">
+    <button data-command="help commands">list all commands</button>
+  </p>
+  <form id="myform">
+    <textarea id="nuinput" name="nuinput" rows="5" cols="120">
+help commands</textarea>
+  </form>
+  <button id="run-nu">Run</button>
+  <small>Alternatively, press Ctrl+Enter (or Command+Enter on OSX)</small>
+
+  <br /><br />
+  <p id="demo"></p>
+  <script src="./bootstrap.js"></script>
+</body>
+
 </html>
