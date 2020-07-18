@@ -13,9 +13,13 @@ const examples = [
     label: "process json, with where filter",
     command: `echo '${JSON.stringify(data)}' | from json | where age > 30`,
   },
+  {
+    label: "process json, format as strings",
+    command: `echo '${JSON.stringify(
+      data
+    )}' | from json | format "{name} is {age} old"`,
+  },
 ];
-const example1 = `echo '${JSON.stringify(data)}' | from json`;
-const example2 = `echo '${JSON.stringify(data)}' | from json | where age > 30`;
 
 async function run_nu(input) {
   return await wasm.run_nu(input);
