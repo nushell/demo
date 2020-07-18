@@ -13,9 +13,13 @@ const examples = [
     label: "process json, with where filter",
     command: `echo '${JSON.stringify(data)}' | from json | where age > 30`,
   },
+  {
+    label: "process json, format as strings",
+    command: `echo '${JSON.stringify(
+      data
+    )}' | from json | format "{name} is {age} old"`,
+  },
 ];
-const example1 = `echo '${JSON.stringify(data)}' | from json`;
-const example2 = `echo '${JSON.stringify(data)}' | from json | where age > 30`;
 
 async function run_nu(input) {
   return await wasm.run_nu(input);
@@ -46,17 +50,22 @@ async function runCommand() {
         }
         return "[no output]";
       }
-      console.log(output.Error.error);
+      const error = output.Error.error;
+      console.log(error);
       return `<div class="output-error">
         <span class="output-error--inline">error</span>: ${
-          output.Error.error.Diagnostic.diagnostic.message
+        (error.UntaggedRuntimeError && error.UntaggedRuntimeError.reason) ||
+        error.Diagnostic.diagnostic.message
         }
         <div>${index + 1}: ${inputsRaw[index]}</div>
-        ${output.Error.error.Diagnostic.diagnostic.labels.map((label) => {
+        ${
+        error.Diagnostic &&
+        error.Diagnostic.diagnostic.labels.map((label) => {
           var padding = "&nbsp;".repeat(label.range.start + 3);
           var marker = "^".repeat(label.range.end - label.range.start);
           return `<div class="output-error--inline">${padding}${marker} ${label.message}</div>`;
-        })}
+        })
+        }
       </div>`;
     })
     .join("<br/>");
@@ -99,9 +108,20 @@ examplesContainer.addEventListener("click", (event) => {
 });
 
 nuinput.addEventListener("keydown", (event) => {
-  if (event.key == "Enter" && (event.metaKey || event.ctrlKey)) {
-    event.preventDefault();
-    runCommand();
+  if (event.key == "Enter") {
+    if (event.metaKey || event.ctrlKey) {
+      event.preventDefault();
+      runCommand();
+    } else {
+      const startPos = nuinput.selectionStart;
+      const endPos = nuinput.selectionEnd;
+      nuinput.value =
+        nuinput.value.substring(0, nuinput.selectionStart) +
+        "\n" +
+        nuinput.value.substring(nuinput.selectionEnd, nuinput.value.length);
+      nuinput.selectionStart = startPos + 1;
+      nuinput.selectionEnd = startPos + 1;
+    }
   }
 });
 

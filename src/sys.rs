@@ -1,10 +1,7 @@
 use async_trait::async_trait;
-use nu_cli::{
-    CommandArgs, CommandRegistry, Example, OutputStream, ToOutputStream, WholeStreamCommand,
-};
+use nu_cli::{CommandArgs, CommandRegistry, Example, OutputStream, WholeStreamCommand};
 use nu_errors::ShellError;
-use nu_protocol::{ReturnSuccess, Signature, SyntaxShape, TaggedDictBuilder, UntaggedValue};
-use nu_source::Tagged;
+use nu_protocol::{ReturnSuccess, Signature, TaggedDictBuilder, UntaggedValue};
 
 use serde::Deserialize;
 
@@ -63,7 +60,7 @@ impl WholeStreamCommand for Sys {
 
 pub async fn sys(
     args: CommandArgs,
-    registry: &CommandRegistry,
+    _registry: &CommandRegistry,
 ) -> Result<OutputStream, ShellError> {
     let tag = args.call_info.name_tag.clone();
     //let (DiceArgs { dice, sides }, _) = args.process(&registry).await?;

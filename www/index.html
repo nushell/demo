@@ -34,6 +34,7 @@
   </header>
   <noscript>This page contains webassembly and javascript content, please enable
     javascript in your browser.</noscript>
+
   <script type="text/javascript" src="browserfs.min.js"></script>
   <script type="text/javascript">
     // Installs globals onto window:
@@ -56,7 +57,7 @@
       // Otherwise, BrowserFS is ready-to-use!
       var fs = BrowserFS.BFSRequire('fs');
       fs.writeFileSync("programming.txt", "this is my contents");
-      // fs.writeFileSync("simple.json", '{"name": "Sally", "age": 45}')
+      fs.writeFileSync("simple.json", '{"name": "Sally", "age": 45}')
       fs.readdir('/', function (e, contents) {
         // etc.
         console.log(e);
@@ -64,6 +65,7 @@
       });
     });
   </script>
+
   <p id="examples">
     <button data-command="help commands">list all commands</button>
   </p>
@@ -72,7 +74,8 @@
 help commands</textarea>
   </form>
   <button id="run-nu">Run</button>
-  <small>Alternatively, press Ctrl+Enter (or Command+Enter on OSX)</small>
+  <small>Press Ctrl+Enter (or Command+Enter on OSX) to add a new line (add
+    linebreak)</small>
 
   <br /><br />
   <p id="demo"></p>
