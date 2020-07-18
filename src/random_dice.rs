@@ -92,8 +92,7 @@ pub async fn dice(
         6
     };
 
-    let iter =
-        (0..dice).map(move |_| UntaggedValue::int(random(1, sides + 1)).into_value(tag.clone()));
+    let iter = (0..dice).map(move |_| UntaggedValue::int(random(1, sides)).into_value(tag.clone()));
 
     Ok(futures::stream::iter(iter).to_output_stream())
 }
