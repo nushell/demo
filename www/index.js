@@ -99,9 +99,13 @@ examplesContainer.addEventListener("click", (event) => {
 });
 
 nuinput.addEventListener("keydown", (event) => {
-  if (event.key == "Enter" && (event.metaKey || event.ctrlKey)) {
-    event.preventDefault();
-    runCommand();
+  if (event.key == "Enter") {
+    if (event.metaKey || event.ctrlKey) {
+      nuinput.value += "\n";
+    } else {
+      event.preventDefault();
+      runCommand();
+    }
   }
 });
 
