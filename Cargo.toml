@@ -29,8 +29,8 @@ console_error_panic_hook = {version = "0.1.6", optional = true}
 # Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
 wee_alloc = {version = "0.4.5", optional = true}
 
-nu-cli = {git = "https://github.com/jonathandturner/nushell.git", branch = "wasm_wip", default-features = false}
-nu-errors = {git = "https://github.com/jonathandturner/nushell.git", branch = "wasm_wip", default-features = false}
+nu-cli = {git = "https://github.com/nushell/nushell.git", branch = "main", default-features = false}
+nu-errors = {git = "https://github.com/nushell/nushell.git", branch = "main", default-features = false}
 
 web-sys = {version = "0.3.14", features = ["console"]}
 
