@@ -1,9 +1,10 @@
+mod random_dice;
 mod utils;
 
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures;
 
-use nu_cli::{create_default_context, parse_and_eval, EnvironmentSyncer};
+use nu_cli::{create_default_context, parse_and_eval, whole_stream_command, EnvironmentSyncer};
 use nu_errors::ShellError;
 
 use serde::Serialize;
@@ -42,6 +43,7 @@ pub async fn run_nu(line: String) -> String {
     match context {
         Ok(mut ctx) => {
             log!("processing line");
+            ctx.add_commands(vec![whole_stream_command(random_dice::SubCommand)]);
             match parse_and_eval(&line, &mut ctx).await {
                 Ok(val) => match serde_json::to_string(&OkError::Ok(val)) {
                     Ok(output) => output,
