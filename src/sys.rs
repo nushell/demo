@@ -45,13 +45,8 @@ impl WholeStreamCommand for Sys {
     fn examples(&self) -> Vec<Example> {
         vec![
             Example {
-                description: "Roll 1 dice with 6 sides each",
-                example: "random dice",
-                result: None,
-            },
-            Example {
-                description: "Roll 10 dice with 12 sides each",
-                example: "random dice -d 10 -s 12",
+                description: "View information about the current system.",
+                example: "sys",
                 result: None,
             },
         ]
@@ -63,7 +58,6 @@ pub async fn sys(
     _registry: &CommandRegistry,
 ) -> Result<OutputStream, ShellError> {
     let tag = args.call_info.name_tag.clone();
-    //let (DiceArgs { dice, sides }, _) = args.process(&registry).await?;
 
     let mut dict = TaggedDictBuilder::new(tag);
     dict.insert_untagged("browser", UntaggedValue::string(getBrowserName()));
