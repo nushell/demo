@@ -110,13 +110,6 @@ examplesContainer.addEventListener("click", (event) => {
 nuinput.addEventListener("keydown", (event) => {
   if (event.key == "Enter") {
     if (event.metaKey || event.ctrlKey) {
-      event.preventDefault();
-      try {
-        runCommand();
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
       const startPos = nuinput.selectionStart;
       const endPos = nuinput.selectionEnd;
       nuinput.value =
@@ -125,6 +118,13 @@ nuinput.addEventListener("keydown", (event) => {
         nuinput.value.substring(nuinput.selectionEnd, nuinput.value.length);
       nuinput.selectionStart = startPos + 1;
       nuinput.selectionEnd = startPos + 1;
+    } else {
+      event.preventDefault();
+      try {
+        runCommand();
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 });
