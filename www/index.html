@@ -56,12 +56,37 @@
       console.log("ready!");
       // Otherwise, BrowserFS is ready-to-use!
       var fs = BrowserFS.BFSRequire('fs');
-      fs.writeFileSync("programming.txt", "this is my contents");
-      fs.writeFileSync("simple.json", '{"name": "Sally", "age": 45}')
-      fs.readdir('/', function (e, contents) {
-        // etc.
-        console.log(e);
-        console.log(contents);
+      // fs.writeFileSync("programming.txt", "this is my contents");
+      // fs.writeFileSync("simple.json", '{"name": "Sally", "age": 45}')
+      // fs.readdir('/', function (e, contents) {
+      //   // etc.
+      //   console.log(e);
+      //   console.log(contents);
+      // });
+    });
+
+    fetch('/nuvfs.zip').then(function (response) {
+      return response.arrayBuffer();
+    }).then(function (zipData) {
+      var Buffer = BrowserFS.BFSRequire('buffer').Buffer;
+
+      BrowserFS.configure({
+        fs: "MountableFileSystem",
+        options: {
+          "/": {
+            fs: "ZipFS",
+            options: {
+              // Wrap as Buffer object.
+              zipData: Buffer.from(zipData)
+            }
+          },
+        }
+      }, function (e) {
+        if (e) {
+          // An error occurred.
+          throw e;
+        }
+        // Otherwise, BrowserFS is ready to use!
       });
     });
   </script>
