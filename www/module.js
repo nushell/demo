@@ -45,12 +45,8 @@ export function readdir(path) {
     }
 }
 
-export function getBrowserName() {
-    return navigator.appName;
-}
-
-export function getBrowserVersion() {
-    return navigator.appVersion;
+export function getPlatform() {
+    return navigator.platform;
 }
 
 export function getBrowserCookiesEnabled() {

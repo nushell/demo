@@ -11,8 +11,7 @@ pub struct Sys;
 
 #[wasm_bindgen(module = "/www/module.js")]
 extern "C" {
-    fn getBrowserName() -> String;
-    fn getBrowserVersion() -> String;
+    fn getPlatform() -> String;
     fn getBrowserCookiesEnabled() -> bool;
     fn getUserAgent() -> String;
 }
@@ -60,8 +59,7 @@ pub async fn sys(
     let tag = args.call_info.name_tag.clone();
 
     let mut dict = TaggedDictBuilder::new(tag);
-    dict.insert_untagged("browser", UntaggedValue::string(getBrowserName()));
-    dict.insert_untagged("version", UntaggedValue::string(getBrowserVersion()));
+    dict.insert_untagged("platform", UntaggedValue::string(getPlatform()));
     dict.insert_untagged(
         "cookies",
         UntaggedValue::boolean(getBrowserCookiesEnabled()),
