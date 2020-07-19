@@ -133,7 +133,15 @@ pub async fn fetch(
     };
 
     let contents = readfile(path.to_string());
-    let buffer: JSBuffer = serde_json::from_str(&contents)?;
+    let buffer: Result<JSBuffer, String> = serde_json::from_str(&contents)?;
+    let buffer = buffer.map_err(|e| {
+        ShellError::labeled_error(
+            format!("Could not open file: {}", e),
+            "could not open",
+            span,
+        )
+    })?;
+
     let res = buffer.data;
 
     // If no encoding is provided we try to guess the encoding to read the file with

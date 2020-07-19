@@ -111,7 +111,11 @@ nuinput.addEventListener("keydown", (event) => {
   if (event.key == "Enter") {
     if (event.metaKey || event.ctrlKey) {
       event.preventDefault();
-      runCommand();
+      try {
+        runCommand();
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       const startPos = nuinput.selectionStart;
       const endPos = nuinput.selectionEnd;

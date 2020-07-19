@@ -14,25 +14,35 @@ export function writefile(filename, contents) {
 
 export function readfile(filename) {
     // Otherwise, BrowserFS is ready-to-use!
-    var fs = BrowserFS.BFSRequire('fs');
-    let contents = fs.readFileSync(filename);
+    try {
+        var fs = BrowserFS.BFSRequire('fs');
+        let contents = fs.readFileSync(filename);
 
-    let output = JSON.stringify(contents);
-    return output;
+        let output = JSON.stringify({ Ok: contents });
+        return output;
+    } catch (e) {
+        let output = JSON.stringify({ Err: "file not found" });
+        return output;
+    }
 }
 
 export function readdir(path) {
     let results = [];
 
-    var fs = BrowserFS.BFSRequire('fs');
-    fs.readdir(path, function (e, contents) {
-        // etc.
-        contents.forEach(file => {
-            results.push(file);
-        })
-    });
+    try {
+        var fs = BrowserFS.BFSRequire('fs');
+        fs.readdir(path, function (e, contents) {
+            // etc.
+            contents.forEach(file => {
+                results.push(file);
+            })
+        });
 
-    return JSON.stringify(results);
+        return JSON.stringify(results);
+    } catch (e) {
+        let output = JSON.stringify({ error: e });
+        return output;
+    }
 }
 
 export function getBrowserName() {
