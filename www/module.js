@@ -31,14 +31,9 @@ export function readdir(path) {
 
     try {
         var fs = BrowserFS.BFSRequire('fs');
-        fs.readdir(path, function (e, contents) {
-            // etc.
-            contents.forEach(file => {
-                results.push(file);
-            })
-        });
+        let contents = fs.readdirSync(path)
 
-        return JSON.stringify(results);
+        return JSON.stringify(contents);
     } catch (e) {
         let output = JSON.stringify({ error: e });
         return output;
