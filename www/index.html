@@ -11,9 +11,13 @@
   <style>
     #examples {
       display: flex;
+      flex-wrap: wrap;
+    }
+    #examples button {
+      margin-bottom: 0.5rem;
     }
     #examples button:not(:first-child) {
-      margin-left: 1rem;
+      margin-left: 0.5rem;
     }
 
     textarea, .output-error {
@@ -103,8 +107,18 @@
   </div>
 
   <p id="examples">
-    <button data-command="help commands">list all commands</button>
+    <button data-command="help commands">all commands</button>
+    <button data-command="ls samples">list samples</button>
   </p>
+  <details>
+    <summary>Paste here to provide your own file, saved as "custom"</summary>
+    <p>
+      <textarea id="custom" rows="5" cols="120"></textarea>
+    </p>
+    <p>
+      <small>For example, paste some json from <a target="_blank" href="https://swapi.dev/#interactive_output">swapi.dev</a>, then run <button data-command="open custom | from json">open custom | from json</button>
+    </p>
+  </details>
   <form id="myform">
     <textarea id="nuinput" name="nuinput" rows="5" cols="120">
 help commands</textarea>

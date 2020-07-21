@@ -10,11 +10,11 @@ const examples = [
     command: `echo '${JSON.stringify(data)}' | from json`,
   },
   {
-    label: "process json, with where filter",
+    label: "use where filter",
     command: `echo '${JSON.stringify(data)}' | from json | where age > 30`,
   },
   {
-    label: "process json, format as strings",
+    label: "format as strings",
     command: `echo '${JSON.stringify(
       data
     )}' | from json | format "{name} is {age} old"`,
@@ -25,6 +25,9 @@ async function run_nu(input) {
   return await wasm.run_nu(input);
 }
 
+var custom = /** @type HTMLTextAreaElement */ (document.getElementById(
+  "custom"
+));
 var nuinput = /** @type HTMLTextAreaElement */ (document.getElementById(
   "nuinput"
 ));
@@ -115,16 +118,23 @@ for (const example of examples) {
   button.textContent = example.label;
   examplesContainer.appendChild(button);
 }
-// copied from https://github.com/nushell/demo/pull/35/files#diff-f0b0d6a8e47512ae7354ef98e85c5ffbR106
 document.body.addEventListener("click", (event) => {
   const command = /** @type HTMLButtonElement */ (event.target).getAttribute(
     "data-command"
   );
-  runCommand();
   if (command) {
     nuinput.value = command;
     runCommand();
   }
+});
+
+// @ts-ignore
+var fs = BrowserFS.BFSRequire("fs");
+if (custom.value) {
+  fs.writeFile("custom", custom.value);
+}
+custom.addEventListener("input", () => {
+  fs.writeFileSync("custom", custom.value);
 });
 
 nuinput.addEventListener("keydown", (event) => {
