@@ -19,7 +19,7 @@ BrowserFS.configure({
   var fs = BrowserFS.BFSRequire('fs');
 });
 
-fetch('/nuvfs.zip').then(function (response) {
+fetch('./nuvfs.zip').then(function (response) {
   return response.arrayBuffer();
 }).then(function (zipData) {
   var Buffer = BrowserFS.BFSRequire('buffer').Buffer;
