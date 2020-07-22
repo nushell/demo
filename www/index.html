@@ -11,11 +11,14 @@
   <style>
     #examples {
       display: flex;
-      column-gap: 1rem;
+    }
+    #examples button:not(:first-child) {
+      margin-left: 1rem;
     }
 
-    .output-error {
+    textarea, .output-error {
       font-family: monospace;
+      font-size: 13px;
     }
 
     .output-error--inline {
