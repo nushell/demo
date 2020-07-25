@@ -32,7 +32,7 @@ var nuinput = /** @type HTMLTextAreaElement */ (document.getElementById(
 async function runCommand() {
   var inputsRaw = nuinput.value.split("\n").filter(Boolean);
   var inputs = inputsRaw.map((input) => {
-    return run_nu(input + "| to html --html_color");
+    return run_nu(input + "| to html --html_color --theme 'blulocolight'");
   });
   let outputs = await Promise.all(inputs);
 
