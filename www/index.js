@@ -17,7 +17,7 @@ const examples = [
     label: "process json, format as strings",
     command: `echo '${JSON.stringify(
       data
-    )}' | from json | format "{name} is {age} old {$(char newline)}"`,
+    )}' | from json | format "{name} is {age} old"`,
   },
 ];
 
