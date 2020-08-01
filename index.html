@@ -29,12 +29,48 @@
       overflow: auto;
     }
 
+    @keyframes fadeout {
+      from { opacity: 1; }
+      to   { opacity: 0.5; }
+    }
+
+    #demo.loading {
+      animation: fadeout 1s infinite;
+      animation-direction: alternate;
+    }
+
     td {
       min-width: 6rem;
     }
 
     body {
         max-width: 90vw
+    }
+
+    .git-ribbon {
+      background-color: #5bb006;
+      overflow: hidden;
+      /* top left corner */
+      position: absolute;
+      right: -3em;
+      top: 2.5em;
+      /* 45 deg ccw rotation */
+      transform: rotate(45deg);
+      /* shadow */
+      box-shadow: 0 0 1em #888;
+    }
+
+    .git-ribbon a {
+      border: 1px solid #faa;
+      color: #fff;
+      display: block;
+      font: bold 81.25% 'Helvetiva Neue', Helvetica, Arial, sans-serif;
+      margin: 0.05em 0 0.075em 0;
+      padding: 0.5em 3.5em;
+      text-align: center;
+      text-decoration: none;
+      /* shadow */
+      text-shadow: 0 0 0.5em #444;
     }
     
     @media (prefers-color-scheme: dark) {
@@ -58,8 +94,13 @@
   <header>
     <h1>Welcome to our <span style=color:#5bb006;>NuShell</span> demo</h1>
   </header>
+  
   <noscript>This page contains webassembly and javascript content, please enable
     javascript in your browser.</noscript>
+
+  <div class="git-ribbon">
+    <a href="https://github.com/nushell/demo" rel="me">Contribute on GitHub</a>
+  </div>
 
   <p id="examples">
     <button data-command="help commands">list all commands</button>
@@ -73,7 +114,10 @@ help commands</textarea>
     linebreak)</small>
 
   <br /><br />
-  <p id="demo"></p>
+  <p id="demo" class="loading"><em>Loading WebAssembly module and initializing virtual file system...</em></p>
+  <p>
+    <small>This is a work in progress. Not all commands work and some errors break everything, requiring a page reload. <a target="_blank" href="https://github.com/nushell/demo/issues/18">More details on GitHub</a></small>
+  </p>
   <script src="./browserfs.min.js"></script>
   </script>
   <script src="./bootstrap.js"></script>
