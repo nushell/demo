@@ -28,6 +28,8 @@ async function run_nu(input) {
 var nuinput = /** @type HTMLTextAreaElement */ (document.getElementById(
   "nuinput"
 ));
+var demo = document.getElementById("demo");
+demo.classList.remove("loading");
 
 async function runCommand() {
   var inputsRaw = nuinput.value.split("\n").filter(Boolean);
@@ -36,7 +38,7 @@ async function runCommand() {
   });
   let outputs = await Promise.all(inputs);
 
-  document.getElementById("demo").innerHTML = outputs
+  demo.innerHTML = outputs
     .map((rawOutput, index) => {
       var output = JSON.parse(rawOutput);
       if (output.Ok) {
