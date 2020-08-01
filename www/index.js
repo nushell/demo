@@ -22,7 +22,12 @@ const examples = [
 ];
 
 async function run_nu(input) {
-  return await wasm.run_nu(input);
+  try {
+    return await wasm.run_nu(input);
+  } catch (e) {
+    console.log(e);
+    return "";
+  }
 }
 
 var custom = /** @type HTMLTextAreaElement */ (document.getElementById(
