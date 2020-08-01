@@ -88,6 +88,19 @@ async function runCommand() {
       commandCell.appendChild(link);
     }
   }
+  const tables = document.querySelectorAll("#demo > table");
+  tables.forEach((table, index) => {
+    if (table.clientWidth > document.body.clientWidth) {
+      const button = document.createElement("button");
+      button.textContent = "Pivot this overflowing table";
+      button.setAttribute(
+        "data-command",
+        `${inputsRaw[index]} | pivot | rename key value`
+      );
+      button.style.marginBottom = "0.5rem";
+      table.parentNode.insertBefore(button, table.nextSibling);
+    }
+  });
 }
 
 document.getElementById("run-nu").addEventListener("click", (event) => {
@@ -102,11 +115,16 @@ for (const example of examples) {
   button.textContent = example.label;
   examplesContainer.appendChild(button);
 }
-examplesContainer.addEventListener("click", (event) => {
-  nuinput.value = /** @type HTMLButtonElement */ (event.target).getAttribute(
+// copied from https://github.com/nushell/demo/pull/35/files#diff-f0b0d6a8e47512ae7354ef98e85c5ffbR106
+document.body.addEventListener("click", (event) => {
+  const command = /** @type HTMLButtonElement */ (event.target).getAttribute(
     "data-command"
   );
   runCommand();
+  if (command) {
+    nuinput.value = command;
+    runCommand();
+  }
 });
 
 nuinput.addEventListener("keydown", (event) => {
