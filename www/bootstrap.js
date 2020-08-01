@@ -5,22 +5,6 @@
 // You can pass in an arbitrary object if you do not wish to pollute
 // the global namespace.
 BrowserFS.install(window);
-// Configures BrowserFS to use the LocalStorage file system.
-BrowserFS.configure(
-  {
-    fs: "LocalStorage",
-  },
-  function (e) {
-    if (e) {
-      // An error happened!
-      throw e;
-    }
-
-    console.log("ready!");
-    // Otherwise, BrowserFS is ready-to-use!
-    var fs = BrowserFS.BFSRequire("fs");
-  }
-);
 
 fetch("./nuvfs.zip")
   .then(function (response) {
@@ -34,6 +18,9 @@ fetch("./nuvfs.zip")
         fs: "MountableFileSystem",
         options: {
           "/": {
+            fs: "LocalStorage",
+          },
+          "/samples": {
             fs: "ZipFS",
             options: {
               // Wrap as Buffer object.
