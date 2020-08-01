@@ -29,6 +29,16 @@
       overflow: auto;
     }
 
+    @keyframes fadeout {
+      from { opacity: 1; }
+      to   { opacity: 0.5; }
+    }
+
+    #demo.loading {
+      animation: fadeout 1s infinite;
+      animation-direction: alternate;
+    }
+
     td {
       min-width: 6rem;
     }
@@ -73,7 +83,7 @@ help commands</textarea>
     linebreak)</small>
 
   <br /><br />
-  <p id="demo"><em>Loading WebAssembly module and initializing virtual file system...</em></p>
+  <p id="demo" class="loading"><em>Loading WebAssembly module and initializing virtual file system...</em></p>
   <script src="./browserfs.min.js"></script>
   </script>
   <script src="./bootstrap.js"></script>
