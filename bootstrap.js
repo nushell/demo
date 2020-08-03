@@ -106,8 +106,8 @@
 /******/ 					"__wbindgen_throw": function(p0i32,p1i32) {
 /******/ 						return installedModules["../pkg/wasm_nu_bg.js"].exports["__wbindgen_throw"](p0i32,p1i32);
 /******/ 					},
-/******/ 					"__wbindgen_closure_wrapper458": function(p0i32,p1i32,p2i32) {
-/******/ 						return installedModules["../pkg/wasm_nu_bg.js"].exports["__wbindgen_closure_wrapper458"](p0i32,p1i32,p2i32);
+/******/ 					"__wbindgen_closure_wrapper459": function(p0i32,p1i32,p2i32) {
+/******/ 						return installedModules["../pkg/wasm_nu_bg.js"].exports["__wbindgen_closure_wrapper459"](p0i32,p1i32,p2i32);
 /******/ 					}
 /******/ 				},
 /******/ 				"./snippets/wasm-nu-5001c71b3059696d/www/module.js": {
@@ -215,7 +215,7 @@
 /******/ 				promises.push(installedWasmModuleData);
 /******/ 			else {
 /******/ 				var importObject = wasmImportObjects[wasmModuleId]();
-/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/wasm_nu_bg.wasm":"e5a597933fe5c2032461"}[wasmModuleId] + ".module.wasm");
+/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/wasm_nu_bg.wasm":"b04c673dcb40e187e238"}[wasmModuleId] + ".module.wasm");
 /******/ 				var promise;
 /******/ 				if(importObject instanceof Promise && typeof WebAssembly.compileStreaming === 'function') {
 /******/ 					promise = Promise.all([WebAssembly.compileStreaming(req), importObject]).then(function(items) {
