@@ -42,7 +42,9 @@ demo.classList.remove("loading");
 async function runCommand() {
   var inputsRaw = nuinput.value.split("\n").filter(Boolean);
   var inputs = inputsRaw.map((input) => {
-    return run_nu(input + "| to html --html_color --theme 'blulocolight'");
+    return run_nu(
+      input + "| to html --html_color --theme 'blulocolight' --partial"
+    );
   });
   let outputs = await Promise.all(inputs);
 
