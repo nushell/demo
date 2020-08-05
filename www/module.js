@@ -33,9 +33,22 @@ export function readdir(path) {
     var fs = BrowserFS.BFSRequire("fs");
     let contents = fs.readdirSync(path);
 
-    return JSON.stringify(contents);
+    let output = [];
+
+    for (let idx in contents) {
+      let stats = fs.statSync(path + "/" + contents[idx]);
+
+      let out = {
+        isDir: stats.isDirectory(),
+        size: stats.size,
+        name: contents[idx],
+      };
+      output.push(out);
+    }
+
+    return JSON.stringify({ Ok: output });
   } catch (e) {
-    let output = JSON.stringify({ error: e });
+    let output = JSON.stringify({ Err: e.toString() });
     return output;
   }
 }
