@@ -1,3 +1,11 @@
+// initialise Sentry to track client-side errors if not on localhost
+if (location.hostname !== "localhost") {
+  Sentry.init({
+    dsn:
+      "https://5f1c75f3562d49fc9b17928e13006118@o431530.ingest.sentry.io/5382894",
+  });
+}
+
 // Installs globals onto window:
 // * Buffer
 // * require (monkey-patches if already defined)
