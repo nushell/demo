@@ -56,18 +56,18 @@ async function runCommand() {
           /<html><body>(.*)<\/body><\/html>/,
           "$1"
         );
-        // console.log(result);
         if (result) {
           return result;
         }
         return "[no output]";
       }
       const error = output.Error.error;
-      console.log(error);
+      console.log("print error", error);
       return `<div class="output-error">
         <span class="output-error--inline">error</span>: ${
           (error.UntaggedRuntimeError && error.UntaggedRuntimeError.reason) ||
-          error.Diagnostic.diagnostic.message
+          (error.Diagnostic && error.Diagnostic.diagnostic.message) ||
+          `unexpected error shape: ${JSON.stringify(error)}`
         }
         <div>${index + 1}: ${inputsRaw[index]}</div>
         ${
