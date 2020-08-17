@@ -45,7 +45,8 @@ pub async fn run_nu(line: String) -> String {
     let context = create_default_context(&mut syncer, true);
     match context {
         Ok(mut ctx) => {
-            log!("processing line");
+            // print the command to help debug unhandled errors
+            log!("processing line {}", &line);
             ctx.add_commands(vec![
                 whole_stream_command(random_dice::SubCommand),
                 whole_stream_command(ls::Ls),
