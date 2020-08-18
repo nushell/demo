@@ -6,12 +6,19 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        compiler: [gcc] # could put [gcc, clang] to see both work
+
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
         with:
           persist-credentials: false
-
+        env:
+          CC:  ${{ matrix.compiler }}
+            
       - uses: jetli/wasm-pack-action@v0.3.0
         with:
           # Optional version of wasm-pack to install(eg. 'v0.9.1', 'latest')
