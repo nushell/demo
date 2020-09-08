@@ -1,5 +1,5 @@
 // initialise Sentry to track client-side errors if not on localhost
-if (location.hostname !== "localhost") {
+if (location.hostname !== "localhost" && window.Sentry) {
   Sentry.init({
     dsn:
       "https://5f1c75f3562d49fc9b17928e13006118@o431530.ingest.sentry.io/5382894",
