@@ -7,7 +7,7 @@ mod utils;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures;
 
-use nu_cli::{create_default_context, parse_and_eval, whole_stream_command, EnvironmentSyncer};
+use nu_cli::{create_default_context, parse_and_eval, whole_stream_command};
 use nu_errors::ShellError;
 
 use serde::Serialize;
@@ -41,8 +41,7 @@ enum OkError {
 pub async fn run_nu(line: String) -> String {
     utils::set_panic_hook();
 
-    let mut syncer = EnvironmentSyncer::new();
-    let context = create_default_context(&mut syncer, true);
+    let context = create_default_context(true);
     match context {
         Ok(mut ctx) => {
             // print the command to help debug unhandled errors
