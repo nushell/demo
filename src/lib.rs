@@ -1,8 +1,8 @@
 mod ls;
 mod open;
+mod panic_hook;
 mod random_dice;
 mod sys;
-mod utils;
 
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures;
@@ -39,7 +39,7 @@ enum OkError {
 
 #[wasm_bindgen]
 pub async fn run_nu(line: String) -> String {
-    utils::set_panic_hook();
+    panic_hook::set_once();
 
     let context = create_default_context(true);
     match context {

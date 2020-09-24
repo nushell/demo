@@ -25,10 +25,32 @@ async function run_nu(input) {
   try {
     return await wasm.run_nu(input);
   } catch (e) {
+    console.log("this never executes, right?!?");
     console.log(e);
     return "";
   }
 }
+
+window.addEventListener("unhandledrejection", (event) => {
+  demo.innerHTML += `<div class="output-error">Unhandled promise rejection: ${event.reason}</div>`;
+});
+
+// export something for a custom panic hook to call
+// for some reason, that's not working with wasm-bindgen and a separate module,
+// so we export something global instead
+// @ts-ignore
+window.debug = {
+  error(error) {
+    demo.innerHTML = `
+      <span style="color: red">Uh oh, the Rust process panicked</span>. This likely means we ran a command that isn't supported in the browser. This breaks the entire runtime, which requires a reload of the page to fix.<br/>
+      <button class='reload'>Click here to reload and run a safe command</button>
+      <br/>
+      Error message and stack:
+      <pre><div class="output-error">error: ${error}</div></pre>`;
+    // @ts-ignore
+    window.Sentry && Sentry.captureMessage(error);
+  },
+};
 
 var custom = /** @type HTMLTextAreaElement */ (document.getElementById(
   "custom"
@@ -124,12 +146,15 @@ for (const example of examples) {
   examplesContainer.appendChild(button);
 }
 document.body.addEventListener("click", (event) => {
-  const command = /** @type HTMLButtonElement */ (event.target).getAttribute(
-    "data-command"
-  );
+  const button = /** @type HTMLButtonElement */ (event.target);
+  const command = button.getAttribute("data-command");
   if (command) {
     nuinput.value = command;
     runCommand();
+  }
+  if (button.classList.contains("reload")) {
+    nuinput.value = "help commands";
+    location.reload();
   }
 });
 
