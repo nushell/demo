@@ -1,10 +1,9 @@
 use async_trait::async_trait;
-use nu_cli::{
-    CommandArgs, CommandRegistry, Example, OutputStream, ToOutputStream, WholeStreamCommand,
-};
+use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{ReturnSuccess, Signature, SyntaxShape, TaggedDictBuilder, UntaggedValue};
 use nu_source::Tagged;
+use nu_stream::{OutputStream, ToOutputStream};
 
 use serde::Deserialize;
 
@@ -38,7 +37,7 @@ impl WholeStreamCommand for Ls {
     fn signature(&self) -> Signature {
         Signature::build("ls").optional(
             "path",
-            SyntaxShape::Pattern,
+            SyntaxShape::GlobPattern,
             "a path to get the directory contents from",
         )
     }
@@ -47,13 +46,9 @@ impl WholeStreamCommand for Ls {
         "View the contents of the current or given path."
     }
 
-    async fn run(
-        &self,
-        args: CommandArgs,
-        registry: &CommandRegistry,
-    ) -> Result<OutputStream, ShellError> {
+    async fn run(&self, args: CommandArgs) -> Result<OutputStream, ShellError> {
         let name = args.call_info.name_tag.clone();
-        let (args, _): (LsArgs, _) = args.process(&registry).await?;
+        let (args, _): (LsArgs, _) = args.process().await?;
 
         let s = readdir(args.path.map(|x| x.item).unwrap_or_else(|| "/".to_string()));
 

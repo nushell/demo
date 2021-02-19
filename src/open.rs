@@ -1,9 +1,10 @@
 use async_trait::async_trait;
 use encoding_rs::{Encoding, UTF_8};
-use nu_cli::{CommandArgs, CommandRegistry, Example, OutputStream, WholeStreamCommand};
+use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{CommandAction, ReturnSuccess, Signature, SyntaxShape, UntaggedValue, Value};
 use nu_source::{AnchorLocation, Span, Tag, Tagged};
+use nu_stream::OutputStream;
 
 use serde::Deserialize;
 
@@ -33,7 +34,7 @@ impl WholeStreamCommand for Open {
         Signature::build(self.name())
             .required(
                 "path",
-                SyntaxShape::Path,
+                SyntaxShape::FilePath,
                 "the file path to load values from",
             )
             .switch(
@@ -53,12 +54,8 @@ impl WholeStreamCommand for Open {
         r#"Load a file into a cell, convert to table if possible (avoid by appending '--raw')."#
     }
 
-    async fn run(
-        &self,
-        args: CommandArgs,
-        registry: &CommandRegistry,
-    ) -> Result<OutputStream, ShellError> {
-        open(args, registry).await
+    async fn run(&self, args: CommandArgs) -> Result<OutputStream, ShellError> {
+        open(args).await
     }
 
     fn examples(&self) -> Vec<Example> {
@@ -70,9 +67,8 @@ impl WholeStreamCommand for Open {
     }
 }
 
-async fn open(args: CommandArgs, registry: &CommandRegistry) -> Result<OutputStream, ShellError> {
-    let registry = registry.clone();
-
+async fn open(args: CommandArgs) -> Result<OutputStream, ShellError> {
+    let scope = args.scope.clone();
     let (
         OpenArgs {
             path,
@@ -80,7 +76,7 @@ async fn open(args: CommandArgs, registry: &CommandRegistry) -> Result<OutputStr
             encoding,
         },
         _,
-    ) = args.process(&registry).await?;
+    ) = args.process().await?;
 
     let span = path.tag.span;
     // let ext = if raw.item {
@@ -95,7 +91,7 @@ async fn open(args: CommandArgs, registry: &CommandRegistry) -> Result<OutputStr
 
     if let Some(ext) = ext {
         // Check if we have a conversion command
-        if let Some(_command) = registry.get_command(&format!("from {}", ext)) {
+        if let Some(_command) = scope.get_command(&format!("from {}", ext)) {
             // The tag that will used when returning a Value
 
             return Ok(OutputStream::one(ReturnSuccess::action(

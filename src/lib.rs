@@ -5,9 +5,10 @@ mod random_dice;
 mod sys;
 
 use wasm_bindgen::prelude::*;
-use wasm_bindgen_futures;
+//use wasm_bindgen_futures;
 
-use nu_cli::{create_default_context, parse_and_eval, whole_stream_command};
+use nu_cli::{create_default_context, parse_and_eval};
+use nu_engine::whole_stream_command;
 use nu_errors::ShellError;
 
 use serde::Serialize;
@@ -43,7 +44,7 @@ pub async fn run_nu(line: String) -> String {
 
     let context = create_default_context(true);
     match context {
-        Ok(mut ctx) => {
+        Ok(ctx) => {
             // print the command to help debug unhandled errors
             log!("processing line {}", &line);
             ctx.add_commands(vec![
@@ -52,7 +53,7 @@ pub async fn run_nu(line: String) -> String {
                 whole_stream_command(open::Open),
                 whole_stream_command(sys::Sys),
             ]);
-            match parse_and_eval(&line, &mut ctx).await {
+            match parse_and_eval(&line, &ctx).await {
                 Ok(val) => match serde_json::to_string(&OkError::Ok(val)) {
                     Ok(output) => output,
                     Err(e) => format!("Error converting to json: {:?}", e),
