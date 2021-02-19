@@ -13,14 +13,17 @@
       display: flex;
       flex-wrap: wrap;
     }
+
     #examples button {
       margin-bottom: 0.5rem;
     }
+
     #examples button:not(:first-child) {
       margin-left: 0.5rem;
     }
 
-    textarea, .output-error {
+    textarea,
+    .output-error {
       font-family: monospace;
       font-size: 13px;
     }
@@ -33,20 +36,26 @@
       overflow: auto;
     }
 
-    #demo > div {
+    #demo>div {
       padding: 0.5rem;
     }
-    #demo > div > table {
+
+    #demo>div>table {
       margin: -0.5rem;
     }
 
-    #demo > div > ol {
+    #demo>div>ol {
       margin-bottom: 0.4rem;
     }
 
     @keyframes fadeout {
-      from { opacity: 1; }
-      to   { opacity: 0.5; }
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0.5;
+      }
     }
 
     #demo.loading {
@@ -58,10 +67,12 @@
       min-width: 6rem;
     }
 
-    tr:nth-child(even) {background-color: #f4fff3;}
+    tr:nth-child(even) {
+      background-color: #f4fff3;
+    }
 
     body {
-        max-width: 90vw
+      max-width: 90vw
     }
 
     .git-ribbon {
@@ -89,29 +100,29 @@
       /* shadow */
       text-shadow: 0 0 0.5em #444;
     }
-    
+
     @media (prefers-color-scheme: dark) {
-        :root {
-            --nc-tx-1: #000000;
-            --nc-tx-2: #1a1a1a;
-            --nc-bg-1: #ffffff;
-            --nc-bg-2: #f6f8fa;
-            --nc-bg-3: #e5e7eb;
-            --nc-lk-1: #0070f3;
-            --nc-lk-2: #0366d6;
-            --nc-lk-tx: #ffffff;
-            --nc-ac-1: #79ffe1;
-            --nc-ac-tx: #0c4047;
-            }
-        }
+      :root {
+        --nc-tx-1: #000000;
+        --nc-tx-2: #1a1a1a;
+        --nc-bg-1: #ffffff;
+        --nc-bg-2: #f6f8fa;
+        --nc-bg-3: #e5e7eb;
+        --nc-lk-1: #0070f3;
+        --nc-lk-2: #0366d6;
+        --nc-lk-tx: #ffffff;
+        --nc-ac-1: #79ffe1;
+        --nc-ac-tx: #0c4047;
+      }
+    }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>Welcome to our <span style=color:#5bb006;>NuShell</span> demo</h1>
+    <h1>Welcome to our <span style=color:#5bb006;>Nushell</span> demo</h1>
   </header>
-  
+
   <noscript>This page contains webassembly and javascript content, please enable
     javascript in your browser.</noscript>
 
@@ -129,7 +140,9 @@
       <textarea id="custom" rows="5" cols="120"></textarea>
     </p>
     <p>
-      <small>For example, paste some json from <a target="_blank" href="https://swapi.dev/#interactive_output">swapi.dev</a>, then run <button data-command="open custom | from json">open custom | from json</button>
+      <small>For example, paste some json from <a target="_blank"
+          href="https://swapi.dev/#interactive_output">swapi.dev</a>, then run <button
+          data-command="open custom | from json">open custom | from json</button>
     </p>
   </details>
   <form id="myform">
@@ -143,7 +156,8 @@ help commands</textarea>
   <br /><br />
   <p id="demo" class="loading"><em>Loading WebAssembly module and initializing virtual file system...</em></p>
   <p>
-    <small>This is a work in progress. Not all commands work and some errors break everything, requiring a page reload. <a target="_blank" href="https://github.com/nushell/demo/issues/18">More details on GitHub</a></small>
+    <small>This is a work in progress. Not all commands work and some errors break everything, requiring a page reload.
+      <a target="_blank" href="https://github.com/nushell/demo/issues/18">More details on GitHub</a></small>
   </p>
   <script src="https://browser.sentry-cdn.com/5.21.1/bundle.min.js" crossorigin="anonymous">
   </script>

@@ -1,10 +1,9 @@
 use async_trait::async_trait;
-use nu_cli::{
-    CommandArgs, CommandRegistry, Example, OutputStream, ToOutputStream, WholeStreamCommand,
-};
+use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{Signature, SyntaxShape, UntaggedValue};
 use nu_source::Tagged;
+use nu_stream::{OutputStream, ToOutputStream};
 
 use serde::Deserialize;
 
@@ -49,12 +48,8 @@ impl WholeStreamCommand for SubCommand {
         "Generate a random dice roll"
     }
 
-    async fn run(
-        &self,
-        args: CommandArgs,
-        registry: &CommandRegistry,
-    ) -> Result<OutputStream, ShellError> {
-        dice(args, registry).await
+    async fn run(&self, args: CommandArgs) -> Result<OutputStream, ShellError> {
+        dice(args).await
     }
 
     fn examples(&self) -> Vec<Example> {
@@ -73,12 +68,9 @@ impl WholeStreamCommand for SubCommand {
     }
 }
 
-pub async fn dice(
-    args: CommandArgs,
-    registry: &CommandRegistry,
-) -> Result<OutputStream, ShellError> {
+pub async fn dice(args: CommandArgs) -> Result<OutputStream, ShellError> {
     let tag = args.call_info.name_tag.clone();
-    let (DiceArgs { dice, sides }, _) = args.process(&registry).await?;
+    let (DiceArgs { dice, sides }, _) = args.process().await?;
 
     let dice = if let Some(dice_tagged) = dice {
         *dice_tagged
