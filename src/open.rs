@@ -1,10 +1,9 @@
-use async_trait::async_trait;
 use encoding_rs::{Encoding, UTF_8};
 use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{CommandAction, ReturnSuccess, Signature, SyntaxShape, UntaggedValue, Value};
 use nu_source::{AnchorLocation, Span, Tag, Tagged};
-use nu_stream::OutputStream;
+use nu_stream::ActionStream;
 
 use serde::Deserialize;
 
@@ -24,7 +23,6 @@ pub struct OpenArgs {
     encoding: Option<Tagged<String>>,
 }
 
-#[async_trait]
 impl WholeStreamCommand for Open {
     fn name(&self) -> &str {
         "open"
@@ -54,8 +52,8 @@ impl WholeStreamCommand for Open {
         r#"Load a file into a cell, convert to table if possible (avoid by appending '--raw')."#
     }
 
-    async fn run(&self, args: CommandArgs) -> Result<OutputStream, ShellError> {
-        open(args).await
+    fn run_with_actions(&self, args: CommandArgs) -> Result<ActionStream, ShellError> {
+        open(args)
     }
 
     fn examples(&self) -> Vec<Example> {
@@ -67,7 +65,7 @@ impl WholeStreamCommand for Open {
     }
 }
 
-async fn open(args: CommandArgs) -> Result<OutputStream, ShellError> {
+fn open(args: CommandArgs) -> Result<ActionStream, ShellError> {
     let scope = args.scope.clone();
     let (
         OpenArgs {
@@ -76,7 +74,7 @@ async fn open(args: CommandArgs) -> Result<OutputStream, ShellError> {
             encoding,
         },
         _,
-    ) = args.process().await?;
+    ) = args.process()?;
 
     let span = path.tag.span;
     // let ext = if raw.item {
@@ -87,20 +85,20 @@ async fn open(args: CommandArgs) -> Result<OutputStream, ShellError> {
     //         .map(|name| name.to_string_lossy().to_string())
     // };
 
-    let (ext, tagged_contents) = fetch(&path.item, span, raw.item, encoding).await?;
+    let (ext, tagged_contents) = fetch(&path.item, span, raw.item, encoding)?;
 
     if let Some(ext) = ext {
         // Check if we have a conversion command
         if let Some(_command) = scope.get_command(&format!("from {}", ext)) {
             // The tag that will used when returning a Value
 
-            return Ok(OutputStream::one(ReturnSuccess::action(
+            return Ok(ActionStream::one(ReturnSuccess::action(
                 CommandAction::AutoConvert(tagged_contents, ext),
             )));
         }
     }
 
-    Ok(OutputStream::one(ReturnSuccess::value(tagged_contents)))
+    Ok(ActionStream::one(ReturnSuccess::value(tagged_contents)))
 }
 
 #[derive(Deserialize)]
@@ -110,7 +108,7 @@ struct JSBuffer {
 
 // Note that we do not output a Stream in "fetch" since it is only used by "enter" command
 // Which we expect to use a concrete Value a not a Stream
-pub async fn fetch(
+pub fn fetch(
     path: &str,
     span: Span,
     raw: bool,

@@ -34,10 +34,6 @@ nu-source = { git = "https://github.com/nushell/nushell.git", branch = "main", d
 nu-engine = { git = "https://github.com/nushell/nushell.git", branch = "main", default-features = false }
 nu-stream = { git = "https://github.com/nushell/nushell.git", branch = "main", default-features = false }
 
-async-trait = "0.1.42"
-futures = { version = "0.3.12", features = ["compat", "io-compat"] }
-futures-util = "0.3.12"
-futures_codec = "0.4.1"
 web-sys = { version = "0.3.47", features = ["console"] }
 
 [dev-dependencies]

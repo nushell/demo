@@ -1,9 +1,9 @@
-use async_trait::async_trait;
+use nu_cli::ActionStream;
 use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{ReturnSuccess, Signature, SyntaxShape, TaggedDictBuilder, UntaggedValue};
 use nu_source::Tagged;
-use nu_stream::{OutputStream, ToOutputStream};
+use nu_stream::ToActionStream;
 
 use serde::Deserialize;
 
@@ -28,7 +28,6 @@ struct DirEntry {
     pub isDir: bool,
 }
 
-#[async_trait]
 impl WholeStreamCommand for Ls {
     fn name(&self) -> &str {
         "ls"
@@ -46,9 +45,9 @@ impl WholeStreamCommand for Ls {
         "View the contents of the current or given path."
     }
 
-    async fn run(&self, args: CommandArgs) -> Result<OutputStream, ShellError> {
+    fn run_with_actions(&self, args: CommandArgs) -> Result<ActionStream, ShellError> {
         let name = args.call_info.name_tag.clone();
-        let (args, _): (LsArgs, _) = args.process().await?;
+        let (args, _): (LsArgs, _) = args.process()?;
 
         let s = readdir(args.path.map(|x| x.item).unwrap_or_else(|| "/".to_string()));
 
@@ -71,9 +70,9 @@ impl WholeStreamCommand for Ls {
                 })
                 .collect();
 
-            Ok(futures::stream::iter(results).to_output_stream())
+            Ok(results.into_iter().to_action_stream())
         } else {
-            Ok(OutputStream::empty())
+            Ok(ActionStream::empty())
         }
     }
 
