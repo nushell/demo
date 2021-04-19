@@ -1,8 +1,7 @@
-use async_trait::async_trait;
+use nu_cli::ActionStream;
 use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{ReturnSuccess, Signature, TaggedDictBuilder, UntaggedValue};
-use nu_stream::OutputStream;
 
 use serde::Deserialize;
 
@@ -20,7 +19,6 @@ extern "C" {
 #[derive(Deserialize)]
 pub struct SysArgs;
 
-#[async_trait]
 impl WholeStreamCommand for Sys {
     fn name(&self) -> &str {
         "sys"
@@ -34,8 +32,8 @@ impl WholeStreamCommand for Sys {
         "View information about the current system."
     }
 
-    async fn run(&self, args: CommandArgs) -> Result<OutputStream, ShellError> {
-        sys(args).await
+    fn run_with_actions(&self, args: CommandArgs) -> Result<ActionStream, ShellError> {
+        sys(args)
     }
 
     fn examples(&self) -> Vec<Example> {
@@ -47,7 +45,7 @@ impl WholeStreamCommand for Sys {
     }
 }
 
-pub async fn sys(args: CommandArgs) -> Result<OutputStream, ShellError> {
+pub fn sys(args: CommandArgs) -> Result<ActionStream, ShellError> {
     let tag = args.call_info.name_tag;
 
     let mut dict = TaggedDictBuilder::new(tag);
@@ -58,5 +56,5 @@ pub async fn sys(args: CommandArgs) -> Result<OutputStream, ShellError> {
     );
     dict.insert_untagged("agent", UntaggedValue::string(getUserAgent()));
 
-    Ok(OutputStream::one(ReturnSuccess::value(dict.into_value())))
+    Ok(ActionStream::one(ReturnSuccess::value(dict.into_value())))
 }

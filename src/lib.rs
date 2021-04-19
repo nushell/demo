@@ -53,7 +53,7 @@ pub async fn run_nu(line: String) -> String {
                 whole_stream_command(open::Open),
                 whole_stream_command(sys::Sys),
             ]);
-            match parse_and_eval(&line, &ctx).await {
+            match parse_and_eval(&line, &ctx) {
                 Ok(val) => match serde_json::to_string(&OkError::Ok(val)) {
                     Ok(output) => output,
                     Err(e) => format!("Error converting to json: {:?}", e),
