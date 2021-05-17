@@ -66,7 +66,7 @@ impl WholeStreamCommand for Open {
 }
 
 fn open(args: CommandArgs) -> Result<ActionStream, ShellError> {
-    let scope = args.scope.clone();
+    let scope = args.scope().clone();
     let (
         OpenArgs {
             path,
