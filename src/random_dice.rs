@@ -1,9 +1,8 @@
-use nu_cli::ActionStream;
 use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{Signature, SyntaxShape, UntaggedValue};
 use nu_source::Tagged;
-use nu_stream::ToActionStream;
+use nu_stream::{ActionStream, IntoActionStream};
 
 use serde::Deserialize;
 
@@ -14,12 +13,6 @@ pub struct SubCommand;
 #[wasm_bindgen(module = "/www/module.js")]
 extern "C" {
     fn random(start: u32, end: u32) -> u32;
-}
-
-#[derive(Deserialize)]
-pub struct DiceArgs {
-    dice: Option<Tagged<u32>>,
-    sides: Option<Tagged<u32>>,
 }
 
 impl WholeStreamCommand for SubCommand {
@@ -69,7 +62,8 @@ impl WholeStreamCommand for SubCommand {
 
 pub fn dice(args: CommandArgs) -> Result<ActionStream, ShellError> {
     let tag = args.call_info.name_tag.clone();
-    let (DiceArgs { dice, sides }, _) = args.process()?;
+    let dice: Option<Tagged<u32>> = args.get_flag("dice")?;
+    let sides: Option<Tagged<u32>> = args.get_flag("sides")?;
 
     let dice = if let Some(dice_tagged) = dice {
         *dice_tagged
@@ -85,5 +79,5 @@ pub fn dice(args: CommandArgs) -> Result<ActionStream, ShellError> {
 
     let iter = (0..dice).map(move |_| UntaggedValue::int(random(1, sides)).into_value(tag.clone()));
 
-    Ok(iter.to_action_stream())
+    Ok(iter.into_action_stream())
 }

@@ -26,9 +26,6 @@ fetch("./nuvfs.zip")
         fs: "MountableFileSystem",
         options: {
           "/": {
-            fs: "LocalStorage",
-          },
-          "/samples": {
             fs: "ZipFS",
             options: {
               // Wrap as Buffer object.

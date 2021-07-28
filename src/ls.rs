@@ -1,9 +1,8 @@
-use nu_cli::ActionStream;
 use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{ReturnSuccess, Signature, SyntaxShape, TaggedDictBuilder, UntaggedValue};
 use nu_source::Tagged;
-use nu_stream::ToActionStream;
+use nu_stream::{ActionStream, IntoActionStream};
 
 use serde::Deserialize;
 
@@ -14,11 +13,6 @@ extern "C" {
     fn readdir(path: String) -> String;
 }
 pub struct Ls;
-
-#[derive(Deserialize)]
-pub struct LsArgs {
-    pub path: Option<Tagged<String>>,
-}
 
 #[allow(non_snake_case)]
 #[derive(Deserialize, Debug)]
@@ -47,9 +41,9 @@ impl WholeStreamCommand for Ls {
 
     fn run_with_actions(&self, args: CommandArgs) -> Result<ActionStream, ShellError> {
         let name = args.call_info.name_tag.clone();
-        let (args, _): (LsArgs, _) = args.process()?;
+        let path: Option<String> = args.opt(0)?;
 
-        let s = readdir(args.path.map(|x| x.item).unwrap_or_else(|| "/".to_string()));
+        let s = readdir(path.map(|x| x).unwrap_or_else(|| "/".to_string()));
 
         let results: Result<Result<Vec<DirEntry>, String>, _> = serde_json::from_str(&s);
 
@@ -70,7 +64,7 @@ impl WholeStreamCommand for Ls {
                 })
                 .collect();
 
-            Ok(results.into_iter().to_action_stream())
+            Ok(results.into_iter().into_action_stream())
         } else {
             Ok(ActionStream::empty())
         }

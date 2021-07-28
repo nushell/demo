@@ -1,7 +1,7 @@
-use nu_cli::ActionStream;
 use nu_engine::{CommandArgs, Example, WholeStreamCommand};
 use nu_errors::ShellError;
 use nu_protocol::{ReturnSuccess, Signature, TaggedDictBuilder, UntaggedValue};
+use nu_stream::ActionStream;
 
 use serde::Deserialize;
 

@@ -67,14 +67,10 @@ impl WholeStreamCommand for Open {
 
 fn open(args: CommandArgs) -> Result<ActionStream, ShellError> {
     let scope = args.scope().clone();
-    let (
-        OpenArgs {
-            path,
-            raw,
-            encoding,
-        },
-        _,
-    ) = args.process()?;
+
+    let path: Tagged<String> = args.req(0)?;
+    let raw = args.has_flag("raw");
+    let encoding: Option<Tagged<String>> = args.get_flag("encoding")?;
 
     let span = path.tag.span;
     // let ext = if raw.item {
@@ -85,7 +81,7 @@ fn open(args: CommandArgs) -> Result<ActionStream, ShellError> {
     //         .map(|name| name.to_string_lossy().to_string())
     // };
 
-    let (ext, tagged_contents) = fetch(&path.item, span, raw.item, encoding)?;
+    let (ext, tagged_contents) = fetch(&path.item, span, raw, encoding)?;
 
     if let Some(ext) = ext {
         // Check if we have a conversion command
